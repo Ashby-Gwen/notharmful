@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hello!</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
@@ -14,23 +14,24 @@
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; justify-content: center; align-items: center;
+            touch-action: none; /* Prevents zooming on mobile during the prank */
         }
 
         .hidden { display: none !important; }
         .no-cursor { cursor: none !important; }
 
         /* Stage 1: Friendly */
-        #friendly-ui { text-align: center; color: #333; }
+        #friendly-ui { text-align: center; color: #333; padding: 20px; }
         #start-btn {
             background: #4CAF50; color: white; border: none;
-            padding: 15px 40px; font-size: 1.5rem; border-radius: 50px;
+            padding: 18px 50px; font-size: 1.5rem; border-radius: 50px;
             cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         /* Stage 2: Calm Analysis */
         .calm-loader {
-            width: 40px; height: 40px; border: 3px solid #f3f3f3;
-            border-top: 3px solid #4CAF50; border-radius: 50%;
+            width: 50px; height: 50px; border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50; border-radius: 50%;
             animation: spin 2s linear infinite; margin: 0 auto 20px;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -38,8 +39,10 @@
         /* Stage 3: Hacked */
         .hacked-bg { background-color: #000 !important; color: #ff3333 !important; font-family: 'Share Tech Mono', monospace !important; }
         .hacked-text {
-            font-size: 5rem; text-shadow: 2px 0 #0ff, -2px 0 #f0f;
+            font-size: 12vw; /* Responsive font size */
+            text-shadow: 2px 0 #0ff, -2px 0 #f0f;
             animation: light-glitch 3s infinite;
+            text-align: center;
         }
         @keyframes light-glitch {
             0%, 95% { transform: translate(0); }
@@ -51,31 +54,35 @@
         #bsod {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0078d7; color: white; padding: 10%; z-index: 400;
+            box-sizing: border-box;
         }
 
-        /* Stage 5: Shutdown */
+        /* Stage 5: Shutdown with Loading */
         #shutdown-ui {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; color: white; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 500;
         }
+        .shutdown-loader-text { margin-top: 15px; font-size: 1.2rem; font-family: sans-serif; }
 
-        /* Stage 6: Prank Reveal (Fading in) */
+        /* Stage 6: Prank Reveal (Mobile Optimized) */
         #prank-reveal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; color: #d63384; z-index: 2000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 2s;
+            opacity: 0; transition: opacity 2s; padding: 20px; text-align: center;
         }
 
-        /* Typing Effect */
+        .typing-container { width: 100%; max-width: 600px; }
+
         .typing-text {
-            font-size: 2.5rem;
-            white-space: nowrap;
+            font-size: 1.8rem; /* Adjusted for mobile */
+            display: inline-block;
             overflow: hidden;
             border-right: 3px solid #d63384;
+            white-space: normal; /* Allow wrap on mobile */
             width: 0;
-            animation: typing 3s steps(40) forwards, blink 0.7s infinite;
+            animation: typing 3.5s steps(40) forwards, blink 0.7s infinite;
         }
 
         @keyframes typing { from { width: 0; } to { width: 100%; } }
@@ -83,12 +90,10 @@
 
         /* Bubbly Hearts */
         .heart {
-            position: absolute;
-            font-size: 2rem;
-            animation: bubble-up 4s ease-in forwards;
-            pointer-events: none;
+            position: absolute; font-size: 2rem;
+            animation: bubble-up 4s ease-in forwards; pointer-events: none;
+            z-index: 2001;
         }
-
         @keyframes bubble-up {
             0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
             20% { opacity: 1; transform: translateY(80vh) scale(1.2); }
@@ -98,37 +103,46 @@
 </head>
 <body>
 
+    <!-- STAGE 1 -->
     <div id="friendly-ui">
         <button id="start-btn">Click me</button>
-        <span style="font-size: 3rem; display: block; margin-top: 10px;">:)</span>
+        <span style="font-size: 4rem; display: block; margin-top: 15px;">:)</span>
     </div>
 
+    <!-- STAGE 2 -->
     <div id="analysis-ui" class="hidden">
         <div class="calm-loader"></div>
-        <h1>Analyzing...</h1>
+        <h1 style="font-weight: 300;">Analyzing...</h1>
     </div>
 
+    <!-- STAGE 3 -->
     <div id="hacked-ui" class="hidden">
         <h1 class="hacked-text">HACKED!</h1>
     </div>
 
+    <!-- STAGE 4 -->
     <div id="bsod" class="hidden">
-        <div style="font-size: 80px;">:(</div>
-        <h2>Your PC ran into a problem and needs to restart.</h2>
+        <div style="font-size: 70px;">:(</div>
+        <h2 style="font-weight: 400; line-height: 1.4;">Your device ran into a problem and needs to restart.</h2>
+        <p style="margin-top: 30px; opacity: 0.8;">Stop Code: SYSTEM_THREAD_EXCEPTION</p>
     </div>
 
+    <!-- STAGE 5 -->
     <div id="shutdown-ui" class="hidden">
-        <div class="win-spinner"></div>
-        <h2 style="font-family: sans-serif;">Shutting down</h2>
+        <div class="calm-loader" style="border-top-color: #fff; width: 40px; height: 40px;"></div>
+        <h2 style="font-family: sans-serif; font-weight: 300; margin: 0;">Shutting down</h2>
+        <div id="shutdown-percent" class="shutdown-loader-text">0% complete</div>
     </div>
 
+    <!-- STAGE 6 (BLACKOUT) -->
     <div id="blackout" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:1000;"></div>
 
+    <!-- STAGE 7 -->
     <div id="prank-reveal" class="hidden">
-        <div style="width: fit-content;">
-            <h1 class="typing-text">Izza Prank lang guys.. ingat sa pagclick</h1>
+        <div class="typing-container">
+            <h1 class="typing-text" id="final-msg">Izza Prank lang guys.. ingat sa pagclick</h1>
         </div>
-        <div style="font-size: 5rem; margin-top: 20px;">❤️</div>
+        <div style="font-size: 4rem; margin-top: 20px;">❤️</div>
     </div>
 
     <script>
@@ -139,6 +153,7 @@
             hacked: document.getElementById('hacked-ui'),
             bsod: document.getElementById('bsod'),
             shutdown: document.getElementById('shutdown-ui'),
+            sdPercent: document.getElementById('shutdown-percent'),
             blackout: document.getElementById('blackout'),
             reveal: document.getElementById('prank-reveal')
         };
@@ -147,16 +162,21 @@
             const heart = document.createElement('div');
             heart.innerHTML = ['❤️', '💖', '✨', '🌸'][Math.floor(Math.random() * 4)];
             heart.className = 'heart';
-            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.left = Math.random() * 90 + 'vw';
             heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 4000);
         }
 
         stages.btn.addEventListener('click', () => {
-            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            // Fullscreen attempt (often blocked on mobile Safari unless user interacts)
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            }
+
             document.body.classList.add('no-cursor');
-            
             stages.friendly.classList.add('hidden');
             stages.analysis.classList.remove('hidden');
 
@@ -177,18 +197,30 @@
                         stages.shutdown.classList.remove('hidden');
                         document.body.style.backgroundColor = "#000";
 
-                        // 4. Shutdown (4s)
+                        // 4. Shutdown with Percentage Loading (4s)
+                        let percent = 0;
+                        let pdInterval = setInterval(() => {
+                            percent += Math.floor(Math.random() * 15);
+                            if (percent >= 100) {
+                                percent = 100;
+                                clearInterval(pdInterval);
+                            }
+                            stages.sdPercent.innerText = `${percent}% complete`;
+                        }, 400);
+
                         setTimeout(() => {
                             stages.shutdown.classList.add('hidden');
                             stages.blackout.classList.remove('hidden');
 
-                            // 5. Black Screen (5s) -> Fade to Prank Reveal
+                            // 5. Black Screen (5s) -> Reveal
                             setTimeout(() => {
+                                stages.blackout.classList.add('hidden');
                                 stages.reveal.classList.remove('hidden');
                                 setTimeout(() => {
                                     stages.reveal.style.opacity = "1";
                                     document.body.classList.remove('no-cursor');
-                                    setInterval(createHeart, 250);
+                                    document.body.style.backgroundColor = "#fff";
+                                    setInterval(createHeart, 300);
                                 }, 50);
                             }, 5000);
 
