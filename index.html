@@ -10,177 +10,193 @@
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            background-color: #fff; /* Start with friendly white */
+            background-color: #fff;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; justify-content: center; align-items: center;
-            transition: background-color 0.5s;
         }
 
         .hidden { display: none !important; }
         .no-cursor { cursor: none !important; }
 
-        /* --- Friendly UI --- */
+        /* Stage 1: Friendly */
         #friendly-ui { text-align: center; color: #333; }
-        
         #start-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            background: #4CAF50; color: white; border: none;
+            padding: 15px 40px; font-size: 1.5rem; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        #start-btn:hover { transform: scale(1.05); }
-
-        .smiley { font-size: 3rem; margin-top: 20px; display: block; }
-
-        /* --- Calm Analyzing UI --- */
-        #analysis-ui { text-align: center; color: #333; }
-        
+        /* Stage 2: Calm Analysis */
         .calm-loader {
-            width: 40px; height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #4CAF50;
-            border-radius: 50%;
-            animation: spin 2s linear infinite;
-            margin: 0 auto 20px;
+            width: 40px; height: 40px; border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50; border-radius: 50%;
+            animation: spin 2s linear infinite; margin: 0 auto 20px;
         }
-
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- Hacked State --- */
+        /* Stage 3: Hacked */
         .hacked-bg { background-color: #000 !important; color: #ff3333 !important; font-family: 'Share Tech Mono', monospace !important; }
-
         .hacked-text {
-            font-size: 5rem;
-            text-shadow: 2px 0 #0ff, -2px 0 #f0f;
+            font-size: 5rem; text-shadow: 2px 0 #0ff, -2px 0 #f0f;
             animation: light-glitch 3s infinite;
         }
-
         @keyframes light-glitch {
             0%, 95% { transform: translate(0); }
             96% { transform: translate(-5px, 2px); }
             97% { transform: translate(5px, -2px); }
-            98% { transform: translate(-2px, -1px); }
         }
 
-        /* --- Windows Shutdown UI --- */
-        #shutdown-ui {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; color: white;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 500;
-        }
-
-        .win-spinner {
-            width: 40px; height: 40px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        /* --- BSOD --- */
+        /* Stage 4: BSOD */
         #bsod {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0078d7; color: white; padding: 10%; z-index: 400;
-            text-align: left; font-family: sans-serif;
+        }
+
+        /* Stage 5: Shutdown */
+        #shutdown-ui {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; color: white; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 500;
+        }
+
+        /* Stage 6: Prank Reveal (Fading in) */
+        #prank-reveal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; color: #d63384; z-index: 2000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 2s;
+        }
+
+        /* Typing Effect */
+        .typing-text {
+            font-size: 2.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid #d63384;
+            width: 0;
+            animation: typing 3s steps(40) forwards, blink 0.7s infinite;
+        }
+
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        /* Bubbly Hearts */
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: bubble-up 4s ease-in forwards;
+            pointer-events: none;
+        }
+
+        @keyframes bubble-up {
+            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
+            20% { opacity: 1; transform: translateY(80vh) scale(1.2); }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Stage 1: Friendly -->
     <div id="friendly-ui">
         <button id="start-btn">Click me</button>
-        <span class="smiley">:)</span>
+        <span style="font-size: 3rem; display: block; margin-top: 10px;">:)</span>
     </div>
 
-    <!-- Stage 2: Calm Analysis -->
     <div id="analysis-ui" class="hidden">
         <div class="calm-loader"></div>
         <h1>Analyzing...</h1>
     </div>
 
-    <!-- Stage 3: Hacked (Dynamically styled via JS) -->
     <div id="hacked-ui" class="hidden">
         <h1 class="hacked-text">HACKED!</h1>
     </div>
 
-    <!-- Stage 4: BSOD -->
     <div id="bsod" class="hidden">
         <div style="font-size: 80px;">:(</div>
-        <h2 style="font-weight: normal; font-size: 2rem;">Your PC ran into a problem and needs to restart.</h2>
-        <p style="margin-top: 40px;">Stop Code: SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
+        <h2>Your PC ran into a problem and needs to restart.</h2>
     </div>
 
-    <!-- Stage 5: Shutdown -->
     <div id="shutdown-ui" class="hidden">
         <div class="win-spinner"></div>
-        <h2 style="font-family: sans-serif; font-weight: 300;">Shutting down</h2>
+        <h2 style="font-family: sans-serif;">Shutting down</h2>
     </div>
 
-    <!-- Final Blackout -->
     <div id="blackout" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:1000;"></div>
 
-    <script>
-        const startBtn = document.getElementById('start-btn');
-        const friendlyUI = document.getElementById('friendly-ui');
-        const analysisUI = document.getElementById('analysis-ui');
-        const hackedUI = document.getElementById('hacked-ui');
-        const shutdownUI = document.getElementById('shutdown-ui');
-        const bsod = document.getElementById('bsod');
-        const blackout = document.getElementById('blackout');
+    <div id="prank-reveal" class="hidden">
+        <div style="width: fit-content;">
+            <h1 class="typing-text">Izza Prank lang guys.. ingat sa pagclick</h1>
+        </div>
+        <div style="font-size: 5rem; margin-top: 20px;">❤️</div>
+    </div>
 
-        startBtn.addEventListener('click', () => {
-            // Go Fullscreen
+    <script>
+        const stages = {
+            btn: document.getElementById('start-btn'),
+            friendly: document.getElementById('friendly-ui'),
+            analysis: document.getElementById('analysis-ui'),
+            hacked: document.getElementById('hacked-ui'),
+            bsod: document.getElementById('bsod'),
+            shutdown: document.getElementById('shutdown-ui'),
+            blackout: document.getElementById('blackout'),
+            reveal: document.getElementById('prank-reveal')
+        };
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = ['❤️', '💖', '✨', '🌸'][Math.floor(Math.random() * 4)];
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        stages.btn.addEventListener('click', () => {
             if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-            
-            // Mouse disappears
             document.body.classList.add('no-cursor');
             
-            // Switch to Calm Analysis
-            friendlyUI.classList.add('hidden');
-            analysisUI.classList.remove('hidden');
+            stages.friendly.classList.add('hidden');
+            stages.analysis.classList.remove('hidden');
 
-            // 1. Stay calm for 4 seconds
+            // 1. Calm Analysis (4s)
             setTimeout(() => {
-                triggerHack();
+                stages.analysis.classList.add('hidden');
+                stages.hacked.classList.remove('hidden');
+                document.body.classList.add('hacked-bg');
+
+                // 2. Hacked (9s)
+                setTimeout(() => {
+                    stages.hacked.classList.add('hidden');
+                    stages.bsod.classList.remove('hidden');
+
+                    // 3. BSOD (3s)
+                    setTimeout(() => {
+                        stages.bsod.classList.add('hidden');
+                        stages.shutdown.classList.remove('hidden');
+                        document.body.style.backgroundColor = "#000";
+
+                        // 4. Shutdown (4s)
+                        setTimeout(() => {
+                            stages.shutdown.classList.add('hidden');
+                            stages.blackout.classList.remove('hidden');
+
+                            // 5. Black Screen (5s) -> Fade to Prank Reveal
+                            setTimeout(() => {
+                                stages.reveal.classList.remove('hidden');
+                                setTimeout(() => {
+                                    stages.reveal.style.opacity = "1";
+                                    document.body.classList.remove('no-cursor');
+                                    setInterval(createHeart, 250);
+                                }, 50);
+                            }, 5000);
+
+                        }, 4000);
+                    }, 3000);
+                }, 9000);
             }, 4000);
         });
-
-        function triggerHack() {
-            // Visual shift to Hacked
-            analysisUI.classList.add('hidden');
-            hackedUI.classList.remove('hidden');
-            document.body.classList.add('hacked-bg');
-
-            // 2. Stay on Hacked for 9 seconds
-            setTimeout(() => {
-                hackedUI.classList.add('hidden');
-                bsod.classList.remove('hidden');
-                
-                // 3. Show BSOD for 3 seconds
-                setTimeout(() => {
-                    bsod.classList.add('hidden');
-                    shutdownUI.classList.remove('hidden');
-                    document.body.style.backgroundColor = "#000";
-
-                    // 4. Final Blackout after 4 seconds
-                    setTimeout(() => {
-                        shutdownUI.classList.add('hidden');
-                        blackout.classList.remove('hidden');
-                    }, 4000);
-                }, 3000); 
-
-            }, 9000);
-        }
     </script>
 </body>
 </html>
