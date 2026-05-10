@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM CRITICAL</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: none;
+        }
+
+        /* Glitch Effect Container */
+        .glitch-wrapper {
+            display: none; /* Hidden until clicked */
+            text-align: center;
+        }
+
+        .hacked-text {
+            color: #0f0;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 5rem;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0.05em 0 0 #f0f, -0.03em -0.04em 0 #0ff,
+                         0.025em 0.04em 0 #ff0;
+            animation: glitch 725ms infinite;
+        }
+
+        /* Initial Start Button (Browsers require a click to go fullscreen) */
+        #start-btn {
+            padding: 15px 30px;
+            font-family: 'Share Tech Mono', monospace;
+            background: transparent;
+            color: #0f0;
+            border: 2px solid #0f0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        #start-btn:hover {
+            background: #0f0;
+            color: #000;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #f0f, -0.03em -0.04em 0 #0ff, 0.025em 0.04em 0 #ff0; }
+            15% { text-shadow: 0.05em 0 0 #f0f, -0.03em -0.04em 0 #0ff, 0.025em 0.04em 0 #ff0; }
+            16% { text-shadow: -0.05em -0.025em 0 #f0f, 0.025em 0.035em 0 #0ff, -0.05em -0.05em 0 #ff0; }
+            49% { text-shadow: -0.05em -0.025em 0 #f0f, 0.025em 0.035em 0 #0ff, -0.05em -0.05em 0 #ff0; }
+            50% { text-shadow: 0.05em 0.035em 0 #f0f, 0.03em 0 0 #0ff, 0 -0.04em 0 #ff0; }
+            99% { text-shadow: 0.05em 0.035em 0 #f0f, 0.03em 0 0 #0ff, 0 -0.04em 0 #ff0; }
+            100% { text-shadow: -0.05em 0 0 #f0f, -0.025em -0.04em 0 #0ff, -0.04em -0.025em 0 #ff0; }
+        }
+
+        /* Screen Glitch Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 255, 15, 0.05);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .active-overlay {
+            animation: flash 0.2s infinite;
+        }
+
+        @keyframes flash {
+            0% { background: rgba(255, 0, 0, 0.1); }
+            50% { background: rgba(0, 0, 255, 0.1); }
+            100% { background: rgba(0, 255, 0, 0.1); }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="start-btn">INITIALIZE SYSTEM SCAN</button>
+
+    <div class="glitch-wrapper" id="display">
+        <div class="overlay" id="overlay"></div>
+        <h1 class="hacked-text" id="status-msg">ANALYZING...</h1>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const display = document.getElementById('display');
+        const statusMsg = document.getElementById('status-msg');
+        const overlay = document.getElementById('overlay');
+
+        startBtn.addEventListener('click', () => {
+            // 1. Enter Fullscreen
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            }
+
+            // 2. Hide button, show glitch effect
+            startBtn.style.display = 'none';
+            display.style.display = 'block';
+            overlay.classList.add('active-overlay');
+
+            // 3. Change message after 3 seconds
+            setTimeout(() => {
+                statusMsg.innerText = "YOU ARE HACKED";
+                statusMsg.style.color = "red";
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
