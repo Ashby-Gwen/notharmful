@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM CRITICAL</title>
+    <title>SYSTEM_FAILURE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
@@ -14,114 +14,171 @@
             height: 100%;
             background-color: #000;
             overflow: hidden;
+            font-family: 'Share Tech Mono', monospace;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: none;
         }
 
-        /* Glitch Effect Container */
-        .glitch-wrapper {
-            display: none; /* Hidden until clicked */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Glitch Container */
+        #main-ui {
+            display: none;
+            position: relative;
+            z-index: 10;
             text-align: center;
         }
 
         .hacked-text {
             color: #0f0;
-            font-family: 'Share Tech Mono', monospace;
             font-size: 5rem;
             text-transform: uppercase;
-            position: relative;
-            text-shadow: 0.05em 0 0 #f0f, -0.03em -0.04em 0 #0ff,
-                         0.025em 0.04em 0 #ff0;
-            animation: glitch 725ms infinite;
+            animation: aggressive-glitch 0.1s infinite;
         }
 
-        /* Initial Start Button (Browsers require a click to go fullscreen) */
+        /* Aggressive Glitch Animation */
+        @keyframes aggressive-glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px) skew(10deg); color: #ff00ff; }
+            40% { transform: translate(5px, -5px) skew(-10deg); color: #00ffff; }
+            60% { transform: translate(-10px, 0px); }
+            80% { transform: translate(10px, 2px) scaleY(1.1); }
+            100% { transform: translate(0); }
+        }
+
+        /* Start Button */
         #start-btn {
-            padding: 15px 30px;
-            font-family: 'Share Tech Mono', monospace;
+            z-index: 100;
+            padding: 20px 40px;
             background: transparent;
             color: #0f0;
-            border: 2px solid #0f0;
-            font-size: 1.5rem;
+            border: 3px solid #0f0;
+            font-size: 2rem;
             cursor: pointer;
-            z-index: 10;
+            font-family: 'Share Tech Mono', monospace;
         }
 
-        #start-btn:hover {
-            background: #0f0;
-            color: #000;
-        }
-
-        @keyframes glitch {
-            0% { text-shadow: 0.05em 0 0 #f0f, -0.03em -0.04em 0 #0ff, 0.025em 0.04em 0 #ff0; }
-            15% { text-shadow: 0.05em 0 0 #f0f, -0.03em -0.04em 0 #0ff, 0.025em 0.04em 0 #ff0; }
-            16% { text-shadow: -0.05em -0.025em 0 #f0f, 0.025em 0.035em 0 #0ff, -0.05em -0.05em 0 #ff0; }
-            49% { text-shadow: -0.05em -0.025em 0 #f0f, 0.025em 0.035em 0 #0ff, -0.05em -0.05em 0 #ff0; }
-            50% { text-shadow: 0.05em 0.035em 0 #f0f, 0.03em 0 0 #0ff, 0 -0.04em 0 #ff0; }
-            99% { text-shadow: 0.05em 0.035em 0 #f0f, 0.03em 0 0 #0ff, 0 -0.04em 0 #ff0; }
-            100% { text-shadow: -0.05em 0 0 #f0f, -0.025em -0.04em 0 #0ff, -0.04em -0.025em 0 #ff0; }
-        }
-
-        /* Screen Glitch Overlay */
-        .overlay {
+        /* Blue Screen of Death (BSOD) */
+        #bsod {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 255, 15, 0.05);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 5;
+            background-color: #0078d7;
+            color: white;
+            padding: 100px;
+            z-index: 1000;
+            box-sizing: border-box;
+            cursor: none;
         }
 
-        .active-overlay {
-            animation: flash 0.2s infinite;
-        }
+        .bsod-face { font-size: 8rem; margin-bottom: 20px; }
+        .bsod-text { font-size: 1.5rem; line-height: 1.6; max-width: 800px; }
 
-        @keyframes flash {
-            0% { background: rgba(255, 0, 0, 0.1); }
-            50% { background: rgba(0, 0, 255, 0.1); }
-            100% { background: rgba(0, 255, 0, 0.1); }
+        /* Final Blackout */
+        #blackout {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 2000;
+            cursor: none;
         }
     </style>
 </head>
 <body>
 
-    <button id="start-btn">INITIALIZE SYSTEM SCAN</button>
+    <button id="start-btn">RUN SYSTEM_DIAGNOSTIC.EXE</button>
 
-    <div class="glitch-wrapper" id="display">
-        <div class="overlay" id="overlay"></div>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div id="main-ui">
         <h1 class="hacked-text" id="status-msg">ANALYZING...</h1>
     </div>
 
+    <div id="bsod">
+        <div class="bsod-face">:(</div>
+        <div class="bsod-text">
+            Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.<br><br>
+            0% complete<br><br>
+            <small>For more information about this issue and possible fixes, visit https://www.windows.com/stopcode</small><br>
+            <small>If you call a support person, give them this info:<br>Stop code: CRITICAL_PROCESS_DIED</small>
+        </div>
+    </div>
+
+    <div id="blackout"></div>
+
     <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
         const startBtn = document.getElementById('start-btn');
-        const display = document.getElementById('display');
+        const mainUI = document.getElementById('main-ui');
         const statusMsg = document.getElementById('status-msg');
-        const overlay = document.getElementById('overlay');
+        const bsod = document.getElementById('bsod');
+        const blackout = document.getElementById('blackout');
+
+        // Matrix Setup
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+
+        let matrixInterval;
 
         startBtn.addEventListener('click', () => {
-            // 1. Enter Fullscreen
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-                elem.webkitRequestFullscreen();
-            }
-
-            // 2. Hide button, show glitch effect
+            // Fullscreen
+            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            
             startBtn.style.display = 'none';
-            display.style.display = 'block';
-            overlay.classList.add('active-overlay');
+            mainUI.style.display = 'block';
+            matrixInterval = setInterval(drawMatrix, 33);
 
-            // 3. Change message after 3 seconds
+            // Timeline
+            // 1. After 3 seconds of "Analyzing", change to "You Are Hacked"
             setTimeout(() => {
                 statusMsg.innerText = "YOU ARE HACKED";
                 statusMsg.style.color = "red";
+                statusMsg.style.fontSize = "7rem";
             }, 3000);
+
+            // 2. 9 seconds after "You are hacked" (Total 12s), show BSOD
+            setTimeout(() => {
+                clearInterval(matrixInterval);
+                mainUI.style.display = 'none';
+                bsod.style.display = 'block';
+            }, 12000);
+
+            // 3. 4 seconds after BSOD, total blackout
+            setTimeout(() => {
+                bsod.style.display = 'none';
+                blackout.style.display = 'block';
+            }, 16000);
         });
     </script>
 </body>
